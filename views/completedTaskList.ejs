@@ -1,0 +1,82 @@
+<% extend('layout') %>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Completed Task
+            <small>List</small>
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <% if(task) { %>
+        <table id="listTable">
+            <thead>
+            <tr>
+                <td><input type="checkbox" id="selectAll"></td>
+                <td>Title</td>
+                <td>Status</td>
+                <td>Undo</td>
+                <td>Delete Task</td>
+            </tr>
+            </thead>
+            <% for(var i = 0; i < task.length; i++) { %>
+            <tr>
+                <td><input type="checkbox" class="select" data-id="<%= task[i]._id %>"></td>
+                <td><%= task[i].title %></td>
+                <td class="completed"><%= task[i].status %></td>
+                <td><a href="/task/updateStatus/<%= task[i]._id%>">Undo</a></td>
+                <td><a href=/task/deleteTask/<%= task[i]._id %> >Delete</a></td>
+            </tr>
+            <% } %>
+        </table>
+        <% } %>
+    </div>
+    <div class="col-md-4">
+        <h3>Task</h3>
+        <p><span id="deleteAllTasks" style="color: #00B7FF;">Delete Task</span></p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#selectAll').on('click', function () {
+            if (this.checked) {
+                $('.select').each(function () {
+                    this.checked = true;
+                });
+            } else {
+                $('.select').each(function () {
+                    this.checked = false;
+                });
+            }
+        });
+        $('#deleteAllTasks').on('click', function () {
+            var id = [];
+            $('.select').each(function () {
+                if (this.checked) {
+                    id.push($(this).data('id'));
+                }
+            });
+            if(id == ''){
+                $('.select').each(function () {
+                    id.push($(this).data('id'));
+                });
+            }
+            $.ajax({
+                type: "POST",
+                url : '/task/deleteManyTask',
+                contentType: 'application/json',
+                data: JSON.stringify(id),
+                success : function(){
+                    window.location.reload();
+                },
+                error : function(error){
+                    window.location.reload();
+                },
+            });
+            return false;
+        });
+    });
+</script>

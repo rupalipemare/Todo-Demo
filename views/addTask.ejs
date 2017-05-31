@@ -1,0 +1,82 @@
+<% extend('layout') %>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Add Task</h1>
+    </div>
+</div>
+
+<div class="row" style="width:50%">
+    <% if(message){ %>
+    <div class="alert alert-danger alert-error">
+        <%= message %>
+    </div>
+    <% } %>
+    <div class="col-lg-12">
+        <form id="addTask">
+            <h4 class="form-group-lg" style="text-align: center"> Add Task </h4>
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input type='text' class="form-control" id="title" name="title"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <input type='text' class="form-control" id="description" name="description"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-submit" value="Add Task"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+       $('#title').focus();
+        var validator = $('#addTask').validate({
+            onclick: false,
+            errorElement: "span",
+            rules: {
+                title: {
+                    required: true,
+                },
+                description : {
+                    required : true,
+                }
+            },
+            messages: {
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass(errorClass).removeClass(validClass);
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass(errorClass);
+            },
+            submitHandler: function (form) {
+                var newTask = {};
+                var id = 0;
+                $.map($("#addTask").serializeArray(), function(n, i){
+                    newTask[n['name']] = n['value'];
+                });
+                var data = [];
+                if (typeof(Storage) !== "undefined") {
+                    if(localStorage.taskData){
+                        $.each(JSON.parse(localStorage.getItem('taskData')), function(key, val){
+                            val['id'] = id;
+                            data.push(val);
+                            id++;
+                        });
+                        newTask['id'] = id;
+                        data.push(newTask);
+                        localStorage.setItem('taskData', JSON.stringify(data));
+                        window.location.href = '/task/pendingTaskList';
+                    }else {
+                        newTask['id'] = id;
+                        data.push(newTask);
+                        localStorage.setItem('taskData', JSON.stringify(data));
+                        window.location.href = '/task/pendingTaskList';
+                    }
+                }
+            },
+        });
+    });
+</script>
