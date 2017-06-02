@@ -1,4 +1,4 @@
-var passport = require('passport'),
+var passport = require  ('passport'),
     localStrategy = require('./localStrategy'),
     google = require('./google'),
     facebook = require('./facebook'),

@@ -14,8 +14,6 @@ module.exports = {
                 if(err) {
                     response.render('addUser', {message: err, userLoggedIn: ''});
                 }else {
-                    console.log('saved user');
-                    console.log(data);
                     response.redirect('/login');
                 }
             });

@@ -10,7 +10,7 @@ router.get('/', indexController.index);
 router.get('/login', indexController.login);
 
 /* Verify user login. */
-router.post('/login', function(request, response, next){
+router.post('/login', function(request, response, next) {
     passport.authenticate('local', function(err, user, info) {
         if (err) {
             return next(err);
@@ -37,7 +37,6 @@ router.get('/auth/google/callback', function(request, response, next) {
             }
             // Successful authentication, redirect home.
             if (!user) {
-                console.log('in not user');
                 var message = "Invalid credentials";
                 // response.redirect('/login');
                 return response.render('login', {message: info.message, userLoggedIn: null});
@@ -61,7 +60,6 @@ router.get('/auth/facebook/callback', function(request, response, next) {
         }
         // Successful authentication, redirect home.
         if (!user) {
-            console.log('in not user');
             var message = "Invalid credentials";
             // response.redirect('/login');
             return response.render('login', {message: info.message, userLoggedIn: null});
