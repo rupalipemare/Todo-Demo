@@ -43,7 +43,7 @@
         <h3>Task</h3>
         <p>Click below to add new task <a href="/task/addTask">Add New Task</a></p>
 
-        <p>Save the selected task <span id="saveAllTasks" style="color: #00B7FF;">Save Task</span></p>
+        <p>Save the selected task <a href="#" id="saveAllTasks" style="color: #00B7FF;">Save Task</a></p>
     </div>
 </div>
 
@@ -101,7 +101,8 @@
                 },
             });
         });
-        $('#saveAllTasks').on('click', function () {
+        $('#saveAllTasks').on('click', function (e) {
+            e.preventDefault();
             var checkedTask = [];
             var obj = [];
             var taskToSave = [];

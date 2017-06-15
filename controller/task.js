@@ -90,11 +90,11 @@ module.exports = {
                 task.status = request.body.status;
                 var error  = task.validateSync();
                 if(error){
-                    response.render('updateTask/'+ request.params.id, {message: error, userLoggedIn: userLoggedIn, task : task});
+                    response.render('updateTask', {message: error, userLoggedIn: userLoggedIn, task : task});
                 }else{
                     task.save(function(err){
                        if(err)
-                            response.render('updateTask/'+ request.params.id, {message: error, userLoggedIn: userLoggedIn, task : task});
+                            response.render('updateTask', {message: err, userLoggedIn: userLoggedIn, task : task});
                         response.redirect('/task/completedTaskList');
                     });
                 }
@@ -117,7 +117,7 @@ module.exports = {
             if(err){
                 console.log(err);
             }else{
-                response.redirect('/pendingTaskList');
+                response.redirect('/task/pendingTaskList');
             }
         });
     },
