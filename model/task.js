@@ -15,14 +15,13 @@ var taskSchema = new Schema({
 taskSchema.pre('save', function (next) {
     var self = this;
     mongoose.models["Task"].findOne({title: self.title}, function (err, task) {
-        if(this.__v && task._id ==  this._id){
-            next();
-        }
-        console.log(task);
         if (!task) {
            next();
         } else {
-            if(self.__v != undefined && user.title == self.title){
+            console.log(task._id + "  " +self._id);
+            console.log(task._id == self._id);
+            // if(self.__v != undefined && task._id == self._id){
+            if(self.__v != undefined && task._id.equals(self._id)){
                 return next();
             }else {
                 next(new Error("Title already exists!"));

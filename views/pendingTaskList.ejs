@@ -50,6 +50,7 @@
 <script type="text/javascript">
     $(function () {
         var taskData = JSON.parse(localStorage.getItem('taskData'));
+        console.log(taskData);
         if (typeof(Storage) !== "undefined") {
             if (localStorage.taskData) {
                 $.each(taskData, function (key, val) {
@@ -59,8 +60,8 @@
                             '<td></td>' +
                             '<td>' + val.title + '</td>' +
                             '<td>Pending</td>' +
-                            '<td><span data-id="' + val.id + '" class="saveTask">Save</span></td>' +
-                            '<td></td>' +
+                            '<td><span data-id="' + val.id + '" class="saveTask" style="color: #00B7FF;cursor:pointer;">Save</span></td>' +
+                            '<td><span data-id="' + val.id + '" class="deleteTask" style="color: #00B7FF;cursor:pointer;">Delete</span></td>' +
                             '</tr>');
                 });
             }
@@ -75,6 +76,16 @@
                 $('.select').each(function () {
                     this.checked = false;
                 });
+            }
+        });
+        $('.deleteTask').on('click', function(){
+            var id = $(this).data('id');
+            taskData.splice(id, 1);
+            $(this).parent().parent().remove();
+            if (taskData !== null && taskData !== 'undefined') {
+                localStorage.setItem('taskData', JSON.stringify(taskData));
+            } else {
+                localStorage.removeItem('taskData', JSON.stringify(taskData));
             }
         });
         $('.saveTask').on('click', function () {

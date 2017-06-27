@@ -34,6 +34,8 @@ module.exports = {
             user.username = request.body.username;
             if(request.body.password !== ''){
                 user.password = request.body.password;
+            }else{
+                user.password = user.password;
             }
             var error = user.validateSync();
             if(error){

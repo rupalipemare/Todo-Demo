@@ -103,7 +103,7 @@ module.exports = {
                        if(err) {
                            response.render('updateTask', {message: err, userLoggedIn: userLoggedIn, task: task});
                        }else {
-                           response.redirect('/task/completedTaskList');
+                           response.redirect('/task/pendingTaskList');
                        }
                     });
                 }

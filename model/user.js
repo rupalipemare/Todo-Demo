@@ -26,12 +26,12 @@ var UserSchema = new Schema({
     },
     password: {
         type: String,
-        validate: {
+        /*validate: {
             validator: function (v) {
-                return /^[a-zA-Z$.0-9]+$/.test(v);
+                return /^[a-zA-Z$.0-9 ]+$/.test(v);
             },
             message: '{PATH} must not have space!'
-        },
+        },*/
         required: [true, '{PATH} is required'], min: [6, '{PATH} requires minimum 6 digits']
     },
     facebookId: {type: String, default: ''},
@@ -42,14 +42,8 @@ var UserSchema = new Schema({
 
 UserSchema.pre('save', function (next) {
     var self = this;
-    console.log(self);
     mongoose.models["User"].findOne({username: self.username}, function (err, user) {
-        if (!user) {
-            // only hash the password if it has been modified (or is new)
-            if (!self.isModified('password')) {
-                return next()
-            }
-            ;
+        if (user.length == 0) {
             bcrypt.hash(self.password, saltRounds, function (err, hash) {
                 if (err) {
                     return next(err);
@@ -59,8 +53,19 @@ UserSchema.pre('save', function (next) {
                 }
             });
         } else {
-            if(self.__v != undefined && user.username == self.username){
-               return next();
+            if(self.__v != undefined && user._id.equals(self._id)){
+                // only hash the password if it has been modified (or is new)
+                if (!self.isModified('password')) {
+                    return next();
+                }
+                bcrypt.hash(self.password, saltRounds, function (err, hash) {
+                    if (err) {
+                        return next(err);
+                    } else {
+                        self.password = hash;
+                        next();
+                    }
+                });
             }else {
                 next(new Error("Username already exists!"));
             }
