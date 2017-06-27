@@ -32,12 +32,23 @@
 <script type="text/javascript">
     $(function(){
        $('#title').focus();
+        var title = [];
+        title = '<%= title%>';
+        title = title.split(',');
+        $.validator.addMethod(
+                "uniqueTitle",
+                function (value, element) {
+                    return this.optional(element) || $.inArray(value, title) == -1;
+                },
+                "Title already exists"
+        );
         var validator = $('#addTask').validate({
             onclick: false,
             errorElement: "span",
             rules: {
                 title: {
                     required: true,
+                    uniqueTitle: true
                 },
                 description : {
                     required : true,

@@ -8,7 +8,7 @@ var UserSchema = new Schema({
         type: String,
         validate: {
             validator: function (v) {
-                return /^[a-zA-Z]+$/.test(v);
+                return /^[a-zA-Z ]+$/.test(v);
             },
             message: '{PATH} must have letters only!'
         },
@@ -28,7 +28,7 @@ var UserSchema = new Schema({
         type: String,
         validate: {
             validator: function (v) {
-                return /^[a-zA-Z]+$/.test(v);
+                return /^[a-zA-Z$.0-9]+$/.test(v);
             },
             message: '{PATH} must not have space!'
         },
@@ -42,6 +42,7 @@ var UserSchema = new Schema({
 
 UserSchema.pre('save', function (next) {
     var self = this;
+    console.log(self);
     mongoose.models["User"].findOne({username: self.username}, function (err, user) {
         if (!user) {
             // only hash the password if it has been modified (or is new)
@@ -58,7 +59,11 @@ UserSchema.pre('save', function (next) {
                 }
             });
         } else {
-            next(new Error("Username already exists!"));
+            if(self.__v != undefined && user.username == self.username){
+               return next();
+            }else {
+                next(new Error("Username already exists!"));
+            }
         }
     });
 });

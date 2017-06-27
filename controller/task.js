@@ -27,14 +27,21 @@ module.exports = {
                 if(data != '') {
                     response.render('completedTaskList', {userLoggedIn: userLoggedIn, message: '', task: data});
                 }else{
-                    response.redirect('/task/pendingTaskList');
+                    response.render('completedTaskList', {userLoggedIn: userLoggedIn, message: 'All Tasks are Completed', task: ''});
+                    // response.redirect('/task/pendingTaskList');
                 }
             }
         });
     },
     addTask: function (request, response) {
+        var title = [];
         var userLoggedIn = request.session.user;
-        response.render('addTask', {userLoggedIn: userLoggedIn, message: ''});
+        Task.find({}, 'title', function(err, data){
+            data.forEach(function(value){
+                title.push(value.title);
+            });
+            response.render('addTask', {userLoggedIn: userLoggedIn, message: '', title : title});
+        });
     },
     saveTask: function (request, response) {
         var userLoggedIn = request.session.user;
@@ -93,9 +100,11 @@ module.exports = {
                     response.render('updateTask', {message: error, userLoggedIn: userLoggedIn, task : task});
                 }else{
                     task.save(function(err){
-                       if(err)
-                            response.render('updateTask', {message: err, userLoggedIn: userLoggedIn, task : task});
-                        response.redirect('/task/completedTaskList');
+                       if(err) {
+                           response.render('updateTask', {message: err, userLoggedIn: userLoggedIn, task: task});
+                       }else {
+                           response.redirect('/task/completedTaskList');
+                       }
                     });
                 }
             }

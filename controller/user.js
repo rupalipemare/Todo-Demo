@@ -32,16 +32,16 @@ module.exports = {
             user = data;
             user.name = request.body.name;
             user.username = request.body.username;
-            if(request.body.password != ''){
+            if(request.body.password !== ''){
                 user.password = request.body.password;
             }
             var error = user.validateSync();
             if(error){
-                response.render('updateUser/'+ request.params.id, {message : error, userLoggedIn : userLoggedIn})
+                response.render('updateUser', {message : error, userLoggedIn : userLoggedIn, user : userLoggedIn})
             }else{
                 user.save(function(err, data){
                     if(err) {
-                        response.render('updateUser/'+ request.params.id, {message: err, userLoggedIn: userLoggedIn});
+                        response.render('updateUser', {message: err, userLoggedIn: userLoggedIn, user : userLoggedIn});
                     }else {
                         request.session.user = data;
                         response.redirect('/task/pendingTaskList');
