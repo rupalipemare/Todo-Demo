@@ -18,9 +18,6 @@ taskSchema.pre('save', function (next) {
         if (!task) {
            next();
         } else {
-            console.log(task._id + "  " +self._id);
-            console.log(task._id == self._id);
-            // if(self.__v != undefined && task._id == self._id){
             if(self.__v != undefined && task._id.equals(self._id)){
                 return next();
             }else {

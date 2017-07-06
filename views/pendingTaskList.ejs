@@ -50,7 +50,6 @@
 <script type="text/javascript">
     $(function () {
         var taskData = JSON.parse(localStorage.getItem('taskData'));
-        console.log(taskData);
         if (typeof(Storage) !== "undefined") {
             if (localStorage.taskData) {
                 $.each(taskData, function (key, val) {

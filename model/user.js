@@ -43,7 +43,7 @@ var UserSchema = new Schema({
 UserSchema.pre('save', function (next) {
     var self = this;
     mongoose.models["User"].findOne({username: self.username}, function (err, user) {
-        if (user.length == 0) {
+        if (!user) {
             bcrypt.hash(self.password, saltRounds, function (err, hash) {
                 if (err) {
                     return next(err);
